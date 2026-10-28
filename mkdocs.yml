@@ -1,0 +1,29 @@
+site_name: Helm for Mere Mortals
+site_description: The package manager for Kubernetes. Writing charts that bundle an application's manifests, shaping them with values, rendering and linting them on your own machine, packaging and sharing them through repositories, and what install, upgrade and rollback do on a real cluster, with the limits stated plainly.
+site_url: https://paulsullivan33-dev.github.io/helm-for-mere-mortals/
+copyright: 'Part of <a href="https://paulsullivan33-dev.github.io/mere-mortals/">For Mere Mortals</a> · Text <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, code MIT'
+
+# Guides live at the repo root (nice for GitHub browsing).
+# The deploy workflow copies them into docs/ before building.
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - What Helm Is: what-helm-is.md
+  - The Moving Parts: the-moving-parts.md
+  - Installing Helm: installing-helm.md
+  - Your First Chart: your-first-chart.md
+  - Anatomy of a Chart: anatomy-of-a-chart.md
+  - Values and Overrides: values-and-overrides.md
+  - Writing Templates: writing-templates.md
+  - Linting and Debugging: lint-and-debug.md
+  - Packaging and Versioning: packaging-and-versioning.md
+  - Repositories: repositories.md
+  - Installing for Real: installing-for-real.md
+  - Recipes: recipes.md
+  - The Neighbours: the-neighbours.md
+  - Limits: limits.md
+  - Troubleshooting: troubleshooting.md
+  - Glossary: glossary.md
+  - Writing Criteria: criteria.md

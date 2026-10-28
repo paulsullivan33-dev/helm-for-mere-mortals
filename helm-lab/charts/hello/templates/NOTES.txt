@@ -1,0 +1,13 @@
+The hello server is installed as release "{{ .Release.Name }}".
+
+Inside the cluster it answers on:
+  http://{{ include "hello.fullname" . }}:{{ .Values.service.port }}/
+
+{{- if .Values.ingress.enabled }}
+
+From outside, the ingress exposes it as:
+  http://{{ .Values.ingress.host }}/
+{{- end }}
+
+It was started with this greeting:
+  {{ .Values.message }}

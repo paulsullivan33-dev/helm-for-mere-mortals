@@ -1,0 +1,8 @@
+$ helm template greetings ./broken --debug 2>&1 | head -20
+level=DEBUG msg="Original chart version" version=""
+level=DEBUG msg="Chart path" path=/home/hatch/workspace/build-check/helm-scratch/work/broken
+level=DEBUG msg="chart name" chart-name=hello
+level=DEBUG msg="unmarshalled JSON schema" schema="{\n  \"$schema\": \"https://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"replicaCount\": {\n      \"type\": \"integer\",\n      \"minimum\": 1,\n      \"maximum\": 10\n    },\n    \"service\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"port\": { \"type\": \"integer\", \"minimum\": 1, \"maximum\": 65535 }\n      }\n    }\n  }\n}\n"
+level=DEBUG msg="number of dependencies in the chart" chart=hello dependencies=0
+
+Error: parse error at (hello/templates/service.yaml:8): function "shout" not defined

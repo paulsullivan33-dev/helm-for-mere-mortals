@@ -1,0 +1,12 @@
+# A second values file for the same chart: more copies, a pinned
+# newer image, a port people can reach from a node, a new greeting.
+replicaCount: 3
+
+image:
+  tag: "1.28"
+
+message: "Hello from the busy site"
+
+service:
+  type: NodePort
+  port: 8080

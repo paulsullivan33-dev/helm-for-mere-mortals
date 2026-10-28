@@ -1,0 +1,40 @@
+$ # break 1: a template function that does not exist
+$ grep "shout" broken/templates/service.yaml
+  type: {{ .Values.service.type | shout }}
+$ helm lint broken
+==> Linting broken
+[INFO] Chart.yaml: icon is recommended
+[ERROR] templates/: parse error at (hello/templates/service.yaml:8): function "shout" not defined
+
+Error: 1 chart(s) linted, 1 chart(s) failed
+lint exit code: 1
+
+$ helm template greetings ./broken
+Error: parse error at (hello/templates/service.yaml:8): function "shout" not defined
+
+Use --debug flag to render out invalid YAML
+template exit code: 1
+
+$ # break 2: a value of the wrong type, caught by values.schema.json
+$ cat values-bad.yaml
+# replicaCount as words: the schema wants an integer.
+replicaCount: "three"
+$ helm lint charts/hello -f values-bad.yaml
+==> Linting charts/hello
+[INFO] Chart.yaml: icon is recommended
+[ERROR] values.yaml: - at '/replicaCount': got string, want integer
+
+[ERROR] templates/: values don't meet the specifications of the schema(s) in the following chart(s):
+hello:
+- at '/replicaCount': got string, want integer
+
+
+Error: 1 chart(s) linted, 1 chart(s) failed
+lint exit code: 1
+
+$ # break 3: the template itself refuses an empty greeting (required)
+$ helm template greetings ./charts/hello --set message=
+Error: execution error at (hello/templates/deployment.yaml:23:24): message must not be empty: the server has nothing to say
+
+Use --debug flag to render out invalid YAML
+template exit code: 1

@@ -1,0 +1,2 @@
+# replicaCount as words: the schema wants an integer.
+replicaCount: "three"

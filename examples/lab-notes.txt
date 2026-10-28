@@ -1,0 +1,115 @@
+The lab — one real binary, one machine, no cluster anywhere
+====================================================================
+
+The lab is Helm as helm.sh ships it,
+downloaded once onto the build machine
+(an Ubuntu 24.04 sandbox, 2 CPUs,
+7.7 GB RAM):
+
+  * Helm 4.3.1 linux-amd64, SHA-256
+    verified against the project's
+    published checksum file before the
+    binary ran (t00).
+  * Helm's cache, config and data
+    folders were pointed into the lab
+    scratch area with HELM_CACHE_HOME,
+    HELM_CONFIG_HOME and
+    HELM_DATA_HOME, so the run wrote
+    nothing to the machine's real home
+    folder. Transcript paths show the
+    lab's folders for that reason;
+    readers' helm env will show the
+    ordinary per-user defaults.
+  * There is no Kubernetes cluster on
+    the machine and no kubectl. Every
+    result in this guide respects that
+    fact rather than working around it.
+
+The two charts:
+
+  * demo/ — the scaffold from
+    `helm create`, left exactly as the
+    tool wrote it, and rendered (t01,
+    t02).
+  * charts/hello/ — nine files written
+    for the guide: a tiny web server
+    (nginx manifests; the image is a
+    template value, never pulled —
+    rendering does not fetch images).
+    Shipped in this repository at
+    helm-lab/charts/hello/, at chart
+    version 0.1.1 — the version the
+    packaging chapter reached. Early
+    transcripts (t03, t04) show it at
+    0.1.0, which is the order the work
+    happened in.
+
+What the lab ran, in
+helm-lab/transcripts/:
+
+  * t00 versions (4.3.1) and the
+    HELM_*_HOME folders.
+  * t01 helm create: the file tree and
+    the scaffold's Chart.yaml.
+  * t02 the scaffold rendered: four
+    documents, and --show-only for the
+    Service alone.
+  * t03 the hello chart linted clean
+    ([INFO] about an icon only) and
+    rendered under release name
+    "greetings".
+  * t04 values: the prod file changed
+    exactly five rendered lines (diff
+    kept whole); --set beat -f, -f beat
+    defaults; the Ingress rendered only
+    with ingress.enabled=true.
+  * t05 three deliberate faults:
+    function "shout" not defined
+    (lint and template, exit 1);
+    replicaCount "three" refused by
+    values.schema.json (exit 1);
+    --set message= stopped by the
+    template's required (exit 1).
+  * t06/t06b --debug: a render that is
+    not valid YAML (a colon smuggled
+    into service.type) shown raw with
+    --debug, and Helm 4's stderr
+    narration of its working.
+  * t07 packaging at 0.1.0 and 0.1.1;
+    the archive's ten files listed.
+  * t08 the local repository whole:
+    repo index, python3 -m http.server
+    on 127.0.0.1:18099, repo add, list,
+    search, --versions, show chart,
+    pull (first attempt failed: the
+    destination folder did not exist),
+    template straight from the repo,
+    repo update, repo remove. The
+    server was stopped afterwards and
+    the port checked empty.
+  * t09 the cluster boundary: helm
+    list and helm install refused with
+    "kubernetes cluster unreachable"
+    (no kubeconfig; Helm tried its
+    localhost:8080 fallback);
+    --dry-run=server failed the same
+    way; --dry-run=client succeeded —
+    full manifest and NOTES, exit 0.
+  * t10 the public-repo bonus that did
+    not happen: repo add for the
+    Prometheus community repository
+    timed out at 90 seconds on the
+    lab's network. Nothing in the
+    guide depends on it.
+
+Documented only (no cluster existed):
+install applying manifests, upgrades
+and their merge, rollbacks, uninstall,
+hooks firing, release records in a
+live namespace, --wait/--atomic in
+action. Also documented only: other
+install routes (script, package
+managers), OCI chart stores, chart
+signing/provenance, dependencies
+fetched from public repositories, and
+the comparison tools in chapter 13.

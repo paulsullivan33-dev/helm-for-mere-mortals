@@ -1,0 +1,62 @@
+$ helm lint charts/hello
+==> Linting charts/hello
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+
+$ helm template greetings ./charts/hello
+---
+# Source: hello/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: greetings-hello
+  labels:
+    helm.sh/chart: hello-0.1.0
+    app.kubernetes.io/name: hello
+    app.kubernetes.io/instance: greetings
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: hello
+    app.kubernetes.io/instance: greetings
+
+---
+# Source: hello/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greetings-hello
+  labels:
+    helm.sh/chart: hello-0.1.0
+    app.kubernetes.io/name: hello
+    app.kubernetes.io/instance: greetings
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: hello
+      app.kubernetes.io/instance: greetings
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: hello
+        app.kubernetes.io/instance: greetings
+    spec:
+      containers:
+        - name: web
+          image: "nginx:1.27"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MESSAGE
+              value: "Hello from the hello chart"
+          ports:
+            - name: http
+              containerPort: 80

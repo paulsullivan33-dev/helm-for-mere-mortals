@@ -1,0 +1,24 @@
+apiVersion: v1
+entries:
+  hello:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-10-28T11:59:30.523056889Z"
+    description: A tiny web server, packaged as a chart to learn Helm with
+    digest: 19f7ab680e0b4b193756ae77541502617ee20be201b5abad1344e30ee76e4c2b
+    name: hello
+    type: application
+    urls:
+    - http://127.0.0.1:18099/hello-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-10-28T11:59:30.52257758Z"
+    description: A tiny web server, packaged as a chart to learn Helm with
+    digest: b1fb20d453320be05cd1037bf7f209e9e3479db68e0c3e066a5a9b6efdcd8423
+    name: hello
+    type: application
+    urls:
+    - http://127.0.0.1:18099/hello-0.1.0.tgz
+    version: 0.1.0
+generated: "2026-10-28T11:59:30.521609638Z"

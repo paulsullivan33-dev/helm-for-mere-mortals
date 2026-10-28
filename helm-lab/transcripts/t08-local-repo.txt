@@ -1,0 +1,47 @@
+$ helm repo add lab http://127.0.0.1:18099
+"lab" has been added to your repositories
+
+$ helm repo list
+NAME	URL                   
+lab 	http://127.0.0.1:18099
+
+$ helm search repo hello
+NAME     	CHART VERSION	APP VERSION	DESCRIPTION                                       
+lab/hello	0.1.1        	1.0.0      	A tiny web server, packaged as a chart to learn...
+
+$ helm search repo lab/hello --versions
+NAME     	CHART VERSION	APP VERSION	DESCRIPTION                                       
+lab/hello	0.1.1        	1.0.0      	A tiny web server, packaged as a chart to learn...
+lab/hello	0.1.0        	1.0.0      	A tiny web server, packaged as a chart to learn...
+
+$ helm show chart lab/hello
+apiVersion: v2
+appVersion: 1.0.0
+description: A tiny web server, packaged as a chart to learn Helm with
+name: hello
+type: application
+version: 0.1.1
+
+
+$ helm pull lab/hello --version 0.1.0 -d dl
+Error: open dl/hello-0.1.0.tgz1098753645: no such file or directory
+ls: cannot access 'dl': No such file or directory
+
+$ helm template greetings lab/hello --version 0.1.1 | grep -E "^# Source|kind:"
+# Source: hello/templates/service.yaml
+kind: Service
+# Source: hello/templates/deployment.yaml
+kind: Deployment
+$ # the destination folder must exist first:
+$ mkdir dl
+$ helm pull lab/hello --version 0.1.0 -d dl
+$ ls -l dl
+total 4
+-rw-r--r-- 1 root root 1944 Oct 28 11:59 hello-0.1.0.tgz
+
+$ helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "lab" chart repository
+Update Complete. ⎈Happy Helming!⎈
+$ helm repo remove lab
+"lab" has been removed from your repositories

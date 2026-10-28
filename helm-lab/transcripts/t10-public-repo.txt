@@ -1,0 +1,6 @@
+$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+exit code: 124
+
+$ helm search repo prometheus | head -8
+
+$ helm show chart prometheus-community/prometheus | head -12

@@ -1,0 +1,22 @@
+$ helm template greetings ./charts/hello --set service.type="ClusterIP: extra"
+Error: YAML parse error on hello/templates/service.yaml: error converting YAML to JSON: yaml: line 11: mapping values are not allowed in this context
+
+Use --debug flag to render out invalid YAML
+exit code: 1
+
+$ # with --debug, helm shows the raw render it rejected:
+$ helm template greetings ./charts/hello --set service.type="ClusterIP: extra" --debug 2>/dev/null | sed -n "1,14p"
+---
+# Source: hello/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greetings-hello
+  labels:
+    helm.sh/chart: hello-0.1.1
+    app.kubernetes.io/name: hello
+    app.kubernetes.io/instance: greetings
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:

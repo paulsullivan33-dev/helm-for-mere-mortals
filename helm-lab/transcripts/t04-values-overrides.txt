@@ -1,0 +1,39 @@
+$ helm template greetings ./charts/hello > render-default.yaml
+$ helm template greetings ./charts/hello -f charts/hello/values-prod.yaml > render-prod.yaml
+$ diff render-default.yaml render-prod.yaml
+13c13
+<   type: ClusterIP
+---
+>   type: NodePort
+15c15
+<     - port: 80
+---
+>     - port: 8080
+35c35
+<   replicas: 1
+---
+>   replicas: 3
+48c48
+<           image: "nginx:1.27"
+---
+>           image: "nginx:1.28"
+52c52
+<               value: "Hello from the hello chart"
+---
+>               value: "Hello from the busy site"
+diff exit code: 1
+
+$ helm template greetings ./charts/hello --set replicaCount=5 --set message="Set beats file" | grep -E "replicas:|value: "
+  replicas: 5
+              value: "Set beats file"
+
+$ # --set beats -f, and -f beats the chart defaults:
+$ helm template greetings ./charts/hello -f charts/hello/values-prod.yaml --set replicaCount=5 | grep "replicas:"
+  replicas: 5
+
+$ # the ingress appears only when a value asks for it:
+$ helm template greetings ./charts/hello --set ingress.enabled=true | grep -A3 "kind: Ingress"
+kind: Ingress
+metadata:
+  name: greetings-hello
+  labels:

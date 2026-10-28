@@ -1,0 +1,93 @@
+helm — the distilled commands
+====================================================================
+Placeholders: RELEASE is a release
+name; CHART is a chart folder, a
+packaged archive, a repository
+reference (repo/name) or an oci://
+reference.
+
+FIRST CONTACT (chapters 3-4)
+--------------------------------------------------------------------
+  curl -LO https://get.helm.sh/helm-v4.3.1-linux-amd64.tar.gz
+  curl -LO https://get.helm.sh/helm-v4.3.1-linux-amd64.tar.gz.sha256sum
+  sha256sum -c helm-v4.3.1-linux-amd64.tar.gz.sha256sum
+  helm version                 # long form
+  helm version --short         # v4.3.1+gc0d08d0
+  helm env | grep HOME         # cache, config, data folders
+
+  helm create demo             # the scaffold chart
+  helm template demo ./demo    # render it; nothing installed
+
+RENDERING AND READING (chapters 4-5)
+--------------------------------------------------------------------
+  helm template RELEASE CHART
+  helm template RELEASE CHART --show-only templates/service.yaml
+  helm lint CHART              # exit 0 clean, 1 on faults
+
+VALUES (chapter 6)
+--------------------------------------------------------------------
+  # strength order: chart values.yaml
+  #   < -f files (later wins) < --set
+  helm template RELEASE CHART -f values-prod.yaml
+  helm template RELEASE CHART -f a.yaml -f b.yaml
+  helm template RELEASE CHART --set replicaCount=5
+  helm template RELEASE CHART --set-string image.tag=1.0
+                                   # stays a string
+  diff <(helm template RELEASE CHART) \
+       <(helm template RELEASE CHART -f values-prod.yaml)
+                                   # the chapter-6 habit
+
+TEMPLATES AND DEBUGGING (chapters 7-8)
+--------------------------------------------------------------------
+  helm lint CHART -f values.yaml   # lint with your values
+  helm template RELEASE CHART --debug
+                                   # see a render helm rejects
+                                   # (v4 also narrates on stderr)
+  # schema refusals and required
+  # failures are template-time: if
+  # lint passes with your values,
+  # the render is the contract
+
+PACKAGING (chapter 9)
+--------------------------------------------------------------------
+  helm package CHART -d pkg    # -> pkg/<name>-<version>.tgz
+  tar -tzf pkg/hello-0.1.1.tgz # what is inside
+  helm dependency list CHART   # declared dependencies
+  helm dependency update CHART # fetch them (network)
+
+REPOSITORIES (chapter 10)
+--------------------------------------------------------------------
+  helm repo index DIR --url http://HOST:PORT
+                                   # writes DIR/index.yaml
+  python3 -m http.server 18099 --directory DIR
+                                   # the smallest chart repo
+  helm repo add lab http://127.0.0.1:18099
+  helm repo list
+  helm repo update
+  helm search repo hello
+  helm search repo lab/hello --versions
+  helm show chart lab/hello    # also: show values/readme/all
+  mkdir dl; helm pull lab/hello --version 0.1.0 -d dl
+                                   # the folder must exist
+  helm repo remove lab
+
+THE CLUSTER HALF (chapter 11 — documented-only in this guide)
+--------------------------------------------------------------------
+  helm list                    # releases; needs a cluster
+  helm install RELEASE CHART
+  helm install RELEASE CHART --dry-run=client
+                                   # the whole release, locally,
+                                   # notes and all — the one
+                                   # install that needs no cluster
+  helm install RELEASE CHART --dry-run=server
+                                   # validate against the cluster,
+                                   # apply nothing
+  helm upgrade RELEASE CHART   # or: upgrade --install
+  helm upgrade RELEASE CHART --wait --atomic
+  helm history RELEASE
+  helm status RELEASE
+  helm get values RELEASE      # what it really runs with
+  helm get manifest RELEASE
+  helm rollback RELEASE REVISION
+  helm uninstall RELEASE
+  helm test RELEASE            # run the chart's test hooks

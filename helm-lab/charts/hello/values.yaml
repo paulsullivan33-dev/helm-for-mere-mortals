@@ -1,0 +1,19 @@
+# How many copies of the server to run.
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: "1.27"
+  pullPolicy: IfNotPresent
+
+# The greeting the server is started with. The Deployment passes
+# it to the container as the MESSAGE environment variable.
+message: "Hello from the hello chart"
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  host: hello.example.test

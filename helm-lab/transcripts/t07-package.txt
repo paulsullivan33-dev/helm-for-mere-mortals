@@ -1,0 +1,20 @@
+$ helm package charts/hello -d pkg
+Successfully packaged chart and saved it to: pkg/hello-0.1.0.tgz
+$ # Chart.yaml version bumped to 0.1.1, package again:
+$ helm package charts/hello -d pkg
+Successfully packaged chart and saved it to: pkg/hello-0.1.1.tgz
+$ ls -l pkg
+total 8
+-rw-rw---- 1 root root 1944 Oct 28 11:59 hello-0.1.0.tgz
+-rw-rw---- 1 root root 1944 Oct 28 11:59 hello-0.1.1.tgz
+$ tar -tzf pkg/hello-0.1.1.tgz
+hello/Chart.yaml
+hello/values.yaml
+hello/values.schema.json
+hello/templates/NOTES.txt
+hello/templates/_helpers.tpl
+hello/templates/deployment.yaml
+hello/templates/ingress.yaml
+hello/templates/service.yaml
+hello/.helmignore
+hello/values-prod.yaml
